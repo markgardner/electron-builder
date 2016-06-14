@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "file": "install-app-deps.js",
+  "sourceRoot": "",
+  "sources": [
+    "../src/install-app-deps.ts"
+  ],
+  "names": [],
+  "mappings": ";;;AAEA,uBAA0G,AAAQ,AAClH,AAAC;AAAD,0BAAkC,AAAW,AAC7C,AAAC;AAAD,MAAY,AAAI,eAAM,AAAM,AAC5B,AAAC;AAAD,2BAA2C,AAAU,AACrD,AAAC;AACD,MAAO,AAAK,gBAAW,AAAO,AAAC,AAE/B,AAAmC;;AACnC,MAAM,AAAS,YAAG,AAAO,QAAC,AAAW,AAAC;AAEtC,MAAM,AAAI,aACP,AAAM,OAAC,AAAM;AACZ,AAAO,aAAE,CAAC,AAAM,QAAE,AAAK,OAAE,AAAK,AAAC,AAChC,AAAC;AAFc,CADA,AAAK,EAGlB,AAAI;AAET,MAAM,AAAU,aAAG,AAAO,QAAC,AAAG,AAAE;AAChC,MAAM,AAAc,iBAAG,AAAI,KAAC,AAAI,KAAC,AAAU,YAAE,AAAc,AAAC;AAE5D;;AACE,cAAM,AAAW,cAAgB,MAAM,OAAe,gBAAC,AAAc,AAAC;AACtE,cAAM,AAAO,UAAkB,MAAM,WAAe,QAAC,AAAG,IAAC,CACvD,OAA0B,2BAAC,AAAU,YAAE,OAAG,IAAC,AAAW,YAAC,AAAW,aAAE,AAAE,MAAI,AAAG,GAAC,AAAG,AAAC,AAAC,OACnF,OAAkB,mBAAC,AAAW,aAAE,AAAc,AAAC,AAChD,AAAC;AAEF,cAAM,OAAmB,oBAAC,AAAO,QAAC,AAAC,AAAC,IAAE,AAAO,QAAC,AAAC,AAAC,IAAE,AAAI,KAAC,AAAI,AAAC,AAC9D;AAAC;AAAA;AAED,IAAI,AAAC;AACH,AAAI,AAAE,AACR;AACA,EAAA,AAAK,AAAC,OAAC,AAAC,AAAC,GAAC,AAAC;AACT,cAAiB,kBAAC,AAAC,AAAC,AACtB;AAAC",
+  "sourcesContent": [
+    "#! /usr/bin/env node\r\n\r\nimport { computeDefaultAppDirectory, installDependencies, getElectronVersion, readPackageJson, use } from \"./util\"\r\nimport { printErrorAndExit } from \"./promise\"\r\nimport * as path from \"path\"\r\nimport { Promise as BluebirdPromise } from \"bluebird\"\r\nimport { DevMetadata } from \"./metadata\"\r\nimport yargs = require(\"yargs\")\r\n\r\n//noinspection JSUnusedLocalSymbols\r\nconst __awaiter = require(\"./awaiter\")\r\n\r\nconst args: any = yargs\r\n  .option(\"arch\", {\r\n    choices: [\"ia32\", \"x64\", \"all\"],\r\n  }).argv\r\n\r\nconst projectDir = process.cwd()\r\nconst devPackageFile = path.join(projectDir, \"package.json\")\r\n\r\nasync function main() {\r\n  const devMetadata: DevMetadata = await readPackageJson(devPackageFile)\r\n  const results: Array<string> = await BluebirdPromise.all([\r\n    computeDefaultAppDirectory(projectDir, use(devMetadata.directories, it => it!.app)),\r\n    getElectronVersion(devMetadata, devPackageFile)\r\n  ])\r\n\r\n  await installDependencies(results[0], results[1], args.arch)\r\n}\r\n\r\ntry {\r\n  main()\r\n}\r\ncatch (e) {\r\n  printErrorAndExit(e)\r\n}"
+  ]
+}

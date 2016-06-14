@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "file": "build-cli.js",
+  "sourceRoot": "",
+  "sources": [
+    "../src/build-cli.ts"
+  ],
+  "names": [],
+  "mappings": ";;;AAEA,0BAAkC,AAClC,AAAC,AAD4C;AAC7C,0BAAkC,AAClC,AAAC,AAD4C;AAC7C,6BAA4B,AAE5B,AAAC,AAFyC;AAE1C,UAAK,AAAa,MAAC,aAAW,AAAE,cAAC,AAAI,AAAC,AAAC,MACpC,AAAK,MAAC,UAAiB,AAAC",
+  "sourcesContent": [
+    "#! /usr/bin/env node\r\n\r\nimport { build, CliOptions } from \"./builder\"\r\nimport { printErrorAndExit } from \"./promise\"\r\nimport { createYargs } from \"./cliOptions\"\r\n\r\nbuild(<CliOptions>(createYargs().argv))\r\n  .catch(printErrorAndExit)"
+  ]
+}
